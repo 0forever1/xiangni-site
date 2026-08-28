@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>想你 ❤</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+  <main class="card">
+    <h1 id="msg">{{ "想你，" + name + " ❤" if name else "想你 ❤" }}</h1>
+    <form method="post" id="frm">
+      <input name="name" placeholder="输入名字，回车显示" autocomplete="off" />
+      <button type="submit">生成分享链接</button>
+    </form>
+    {% if name %}
+      <p>分享链接：<a href="{{ request.host_url.rstrip('/') + url_for('index') }}?to={{ name|urlencode }}">{{ request.host_url.rstrip('/') + url_for('index') }}?to={{ name|urlencode }}</a></p>
+    {% endif %}
+  </main>
+</body>
+</html>
