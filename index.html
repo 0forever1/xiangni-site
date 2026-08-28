@@ -17,7 +17,7 @@
       </header>
 
       <form id="frm" class="form" onsubmit="return false;">
-        <input id="name" class="input" placeholder="输入名字，回车/点击生成" autocomplete="off" />
+        <input id="name" class="input" placeholder="输入名字，回车/点击生成（示例：卓）" autocomplete="off" />
         <div class="actions">
           <button id="gen" class="btn primary">生成分享链接</button>
           <button id="previewBtn" class="btn ghost" title="预览">预览</button>
@@ -32,9 +32,6 @@
         </div>
       </div>
 
-      <footer class="foot">
-        <small>简洁 · 免费 · 无需绑定卡</small>
-      </footer>
     </div>
   </main>
 
@@ -78,8 +75,9 @@
       showResultWithName(name);
     });
 
+    // 如果没有输入，预览默认使用“卓”作为示例
     previewBtn.addEventListener('click', () => {
-      const name = nameInput.value.trim() || q('to') || '';
+      const name = nameInput.value.trim() || q('to') || '卓';
       showResultWithName(name);
     });
 
@@ -93,7 +91,7 @@
       }
     });
 
-    // 页面加载时如果 ?to 存在，显示
+    // 页面加载时如果 ?to 存在，显示并把输入框填上
     const initialTo = q('to');
     if (initialTo) {
       nameInput.value = initialTo;
