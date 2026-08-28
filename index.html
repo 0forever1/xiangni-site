@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>想你 ❤</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <main class="card">
+    <h1 id="msg">想你 ❤</h1>
+    <form id="frm">
+      <input id="name" placeholder="输入名字，回车显示" autocomplete="off" />
+      <button type="submit">生成分享链接</button>
+    </form>
+    <p id="share" class="hidden">分享链接：<a id="shareLink" href="#">copy</a></p>
+  </main>
+
+  <script>
+    function q(name){ return new URLSearchParams(location.search).get(name); }
+    function setMsg(name){
+      const msg = name ? `想你，${name} ❤` : '想你 ❤';
+      document.getElementById('msg').textContent = msg;
+    }
+    // 页面加载时读取 ?to=Name
+    const to = q('to');
+    if (to) setMsg(decodeURIComponent(to));
+
+    document.getElementById('frm').addEventListener('submit', e=>{
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      if (!name) return alert('请输入名字');
+      const p = '?to=' + encodeURIComponent(name);
+      history.replaceState(null, '', p);
+      setMsg(name);
+      const link = location.origin + location.pathname + p;
+      const a = document.getElementById('shareLink');
+      a.href = link;
+      a.textContent = link;
+      document.getElementById('share').classList.remove('hidden');
+      navigator.clipboard?.writeText(link).catch(()=>{});
+    });
+  </script>
+</body>
+</html>
