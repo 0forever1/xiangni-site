@@ -14,8 +14,12 @@ html,body{height:100%}
 body{
   margin:0;
   font-family: "Noto Sans SC", "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  background: radial-gradient(1200px 600px at 10% 10%, #fff1f2 0%, transparent 15%),
-              linear-gradient(180deg,var(--bg1),var(--bg2));
+  /* Layered background: soft radial + linear gradient + subtle paper texture using repeating stripes */
+  background-color: var(--bg1);
+  background-image: radial-gradient(1200px 600px at 10% 10%, #fff1f2 0%, transparent 15%),
+                    linear-gradient(180deg,var(--bg1),var(--bg2)),
+                    repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 6px);
+  background-blend-mode: normal, normal, overlay;
   color:#111;
   -webkit-font-smoothing:antialiased;
   display:flex;
@@ -44,6 +48,8 @@ body{
   width:100%;
   max-width:680px; /* limit card width for better reading */
   text-align:center; /* center content inside card */
+  /* slight backdrop to let texture show through subtly */
+  backdrop-filter: saturate(110%) blur(2px);
 }
 
 /* header */
@@ -100,7 +106,7 @@ body{
 .btn.small{padding:8px 10px;font-size:14px}
 
 /* 结果区域 */
-.result{margin-top:18px;padding:16px;border-radius:10px;background:var(--glass);border:1px solid rgba(0,0,0,0.03);display:flex;flex-direction:column;align-items:center;gap:10px}
+.result{margin-top:18px;padding:16px;border-radius:10px;background:rgba(255,255,255,0.86);border:1px solid rgba(0,0,0,0.03);display:flex;flex-direction:column;align-items:center;gap:10px}
 .result.hidden{display:none}
 .msg{font-size:28px;color:var(--accent);font-weight:700;margin-bottom:0}
 .share{display:flex;gap:8px;align-items:center;width:100%;max-width:460px}
@@ -108,8 +114,6 @@ body{
   flex:1;padding:10px;border-radius:8px;border:1px solid #eee;background:white;font-size:14px;
   color:#0c0c0c;
 }
-
-/* footer (removed per request) */
 
 /* confetti hearts */
 .confetti-root{position:fixed;left:0;top:0;pointer-events:none;width:100%;height:100%;overflow:visible}
