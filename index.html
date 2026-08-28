@@ -4,42 +4,117 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>想你 ❤</title>
+  <meta name="description" content="想你 — 为你生成一句简单可分享的想念话语。" />
   <link rel="stylesheet" href="/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
 </head>
 <body>
-  <main class="card">
-    <h1 id="msg">想你 ❤</h1>
-    <form id="frm">
-      <input id="name" placeholder="输入名字，回车显示" autocomplete="off" />
-      <button type="submit">生成分享链接</button>
-    </form>
-    <p id="share" class="hidden">分享链接：<a id="shareLink" href="#">copy</a></p>
+  <main class="wrap">
+    <div class="card">
+      <header class="header">
+        <h1 class="title">想你 <span class="heart" aria-hidden="true">❤</span></h1>
+        <p class="subtitle">把这句话生成成分享链接，发送给你想念的人。</p>
+      </header>
+
+      <form id="frm" class="form" onsubmit="return false;">
+        <input id="name" class="input" placeholder="输入名字，回车/点击生成" autocomplete="off" />
+        <div class="actions">
+          <button id="gen" class="btn primary">生成分享链接</button>
+          <button id="previewBtn" class="btn ghost" title="预览">预览</button>
+        </div>
+      </form>
+
+      <div id="result" class="result hidden">
+        <div class="msg" id="msg">想你 ❤</div>
+        <div class="share">
+          <input id="shareInput" class="shareInput" readonly />
+          <button id="copyBtn" class="btn small">复制链接</button>
+        </div>
+      </div>
+
+      <footer class="foot">
+        <small>简洁 · 免费 · 无需绑定卡</small>
+      </footer>
+    </div>
   </main>
 
-  <script>
-    function q(name){ return new URLSearchParams(location.search).get(name); }
-    function setMsg(name){
-      const msg = name ? `想你，${name} ❤` : '想你 ❤';
-      document.getElementById('msg').textContent = msg;
-    }
-    // 页面加载时读取 ?to=Name
-    const to = q('to');
-    if (to) setMsg(decodeURIComponent(to));
+  <!-- 简单的“心形飞溅”容器 -->
+  <div id="confetti-root" class="confetti-root" aria-hidden="true"></div>
 
-    document.getElementById('frm').addEventListener('submit', e=>{
-      e.preventDefault();
-      const name = document.getElementById('name').value.trim();
-      if (!name) return alert('请输入名字');
-      const p = '?to=' + encodeURIComponent(name);
-      history.replaceState(null, '', p);
+  <script>
+    // 辅助：读取 ?to 参数
+    function q(name){ return new URLSearchParams(location.search).get(name); }
+    const nameInput = document.getElementById('name');
+    const genBtn = document.getElementById('gen');
+    const copyBtn = document.getElementById('copyBtn');
+    const previewBtn = document.getElementById('previewBtn');
+    const result = document.getElementById('result');
+    const msg = document.getElementById('msg');
+    const shareInput = document.getElementById('shareInput');
+    const confettiRoot = document.getElementById('confetti-root');
+
+    function setMsg(name){
+      msg.textContent = name ? `想你，${name} ❤` : '想你 ❤';
+    }
+
+    function makeShareLink(name){
+      const p = '?to=' + encodeURIComponent(name || '');
+      return location.origin + location.pathname + p;
+    }
+
+    function showResultWithName(name){
       setMsg(name);
-      const link = location.origin + location.pathname + p;
-      const a = document.getElementById('shareLink');
-      a.href = link;
-      a.textContent = link;
-      document.getElementById('share').classList.remove('hidden');
-      navigator.clipboard?.writeText(link).catch(()=>{});
+      const link = makeShareLink(name);
+      shareInput.value = link;
+      result.classList.remove('hidden');
+      // 触发小动画
+      burstHearts();
+    }
+
+    genBtn.addEventListener('click', () => {
+      const name = nameInput.value.trim();
+      if (!name) return alert('请输入名字');
+      history.replaceState(null, '', '?to=' + encodeURIComponent(name));
+      showResultWithName(name);
     });
+
+    previewBtn.addEventListener('click', () => {
+      const name = nameInput.value.trim() || q('to') || '';
+      showResultWithName(name);
+    });
+
+    copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(shareInput.value);
+        copyBtn.textContent = '已复制 ✓';
+        setTimeout(()=> copyBtn.textContent = '复制链接', 1400);
+      } catch {
+        alert('复制失败，请手动复制链接。');
+      }
+    });
+
+    // 页面加载时如果 ?to 存在，显示
+    const initialTo = q('to');
+    if (initialTo) {
+      nameInput.value = initialTo;
+      showResultWithName(initialTo);
+    }
+
+    // 简单心形飞溅（不依赖外部库）
+    function burstHearts(){
+      const count = 12;
+      for (let i=0;i<count;i++){
+        const el = document.createElement('span');
+        el.className = 'confetti-heart';
+        el.textContent = ['❤','❣','💗','💖'][Math.floor(Math.random()*4)];
+        const left = 30 + Math.random()*40; // 宽度百分比范围
+        el.style.left = left + '%';
+        el.style.animationDelay = (Math.random()*0.2) + 's';
+        confettiRoot.appendChild(el);
+        // 清理
+        setTimeout(()=> el.remove(), 2000);
+      }
+    }
   </script>
 </body>
 </html>

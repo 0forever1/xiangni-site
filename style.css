@@ -1,12 +1,125 @@
-:root{ --bg:#fff6f6; --card:#fff; --accent:#d83a5b; --muted:#666; }
+:root{
+  --bg1: #fff8fa;
+  --bg2: #fff0f6;
+  --card: #ffffff;
+  --accent: #d83a5b;
+  --muted: #6c6c6c;
+  --glass: rgba(255,255,255,0.7);
+  --shadow: 0 10px 30px rgba(0,0,0,0.06);
+  --radius: 14px;
+  font-synthesis: none;
+}
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,var(--bg),#fff);} 
-.card{width:min(720px,94vw);background:var(--card);padding:36px;border-radius:12px;box-shadow:0 6px 30px rgba(200,0,60,0.06);text-align:center;font-family:PingFang SC, "Helvetica Neue", Arial;}
-h1{color:var(--accent);font-size:64px;margin:0 0 18px}
-form{display:flex;gap:8px;justify-content:center}
-input{padding:10px 14px;border:1px solid #eee;border-radius:8px;min-width:220px;font-size:16px}
-button{background:var(--accent);color:white;border:none;padding:10px 14px;border-radius:8px;font-size:16px;cursor:pointer}
-button:hover{opacity:.95}
-p{color:var(--muted);margin-top:14px;word-break:break-all}
-a{color:var(--accent);text-decoration:none}
-.hidden{display:none}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: "Noto Sans SC", "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: radial-gradient(1200px 600px at 10% 10%, #fff1f2 0%, transparent 15%),
+              linear-gradient(180deg,var(--bg1),var(--bg2));
+  color:#111;
+  -webkit-font-smoothing:antialiased;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:32px;
+}
+
+/* 中心卡片 */
+.wrap{width:100%;max-width:880px;padding:24px}
+.card{
+  background: linear-gradient(180deg, rgba(255,255,255,0.9), var(--card));
+  border-radius:var(--radius);
+  padding:28px;
+  box-shadow:var(--shadow);
+  border: 1px solid rgba(220,220,220,0.6);
+}
+
+/* header */
+.header{margin-bottom:18px}
+.title{
+  margin:0;
+  font-size:48px;
+  letter-spacing: -1px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-weight:700;
+}
+.heart{
+  color:var(--accent);
+  display:inline-block;
+  font-size:46px;
+  transform-origin:center center;
+  animation: pulse 1s infinite;
+  filter: drop-shadow(0 5px 8px rgba(216,58,91,0.18));
+}
+@keyframes pulse{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.18)}
+  100%{transform:scale(1)}
+}
+.subtitle{margin:8px 0 0;color:var(--muted)}
+
+/* 表单 */
+.form{display:flex;flex-direction:column;gap:12px}
+.input{
+  padding:12px 14px;
+  border-radius:10px;
+  border:1px solid #eee;
+  font-size:16px;
+  outline:none;
+  box-shadow: inset 0 -1px 0 rgba(0,0,0,0.02);
+}
+.input:focus{border-color:rgba(216,58,91,0.6); box-shadow:0 6px 30px rgba(216,58,91,0.06)}
+
+.actions{display:flex;gap:10px;margin-left:auto}
+.btn{
+  padding:10px 14px;border-radius:10px;border:1px solid rgba(0,0,0,0.08);
+  background:transparent;font-weight:600;cursor:pointer;
+}
+.btn.primary{
+  background:linear-gradient(90deg,var(--accent),#ff4d6d);
+  color:#fff;border:none;
+  box-shadow: 0 8px 18px rgba(216,58,91,0.12);
+}
+.btn.ghost{background:transparent}
+.btn.small{padding:8px 10px;font-size:14px}
+
+/* 结果区域 */
+.result{margin-top:18px;padding:16px;border-radius:10px;background:var(--glass);border:1px solid rgba(0,0,0,0.03)}
+.result.hidden{display:none}
+.msg{font-size:28px;color:var(--accent);font-weight:700;margin-bottom:10px}
+.share{display:flex;gap:8px;align-items:center}
+.shareInput{
+  flex:1;padding:10px;border-radius:8px;border:1px solid #eee;background:white;font-size:14px;
+  color:#0c0c0c;
+}
+
+/* footer */
+.foot{margin-top:14px;color:var(--muted);font-size:13px;text-align:right}
+
+/* confetti hearts */
+.confetti-root{position:fixed;left:0;top:0;pointer-events:none;width:100%;height:100%;overflow:visible}
+.confetti-heart{
+  position:absolute;bottom:28%;font-size:18px;opacity:0;
+  transform:translateY(0) scale(0.9);
+  animation: flyUp 1.6s cubic-bezier(.2,.8,.2,1);
+  color:var(--accent);
+  text-shadow: 0 6px 14px rgba(216,58,91,0.06);
+}
+@keyframes flyUp{
+  0%{opacity:0; transform: translateY(0) scale(0.9)}
+  10%{opacity:1}
+  70%{opacity:1; transform: translateY(-260px) rotate(-40deg) scale(1.1)}
+  100%{opacity:0; transform: translateY(-340px) rotate(20deg) scale(0.8)}
+}
+
+/* 响应式 */
+@media (max-width:600px){
+  .title{font-size:34px}
+  .heart{font-size:36px}
+  .card{padding:18px}
+  .input{font-size:15px}
+  .msg{font-size:20px}
+  .actions{flex-direction:column;align-items:stretch}
+}
